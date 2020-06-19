@@ -1,1 +1,1 @@
-worker: python homework.py
+worker: python torkong_bot.py
