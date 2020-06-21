@@ -93,7 +93,7 @@ def send_message(message):
 
 def main():
     current_timestamp = int(time.time())
-    send_message('TorKonG BOT at back in work!!!')
+    send_message('TorKonG BOT now back in work!!!')
 
     while True:
         try:
