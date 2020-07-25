@@ -131,9 +131,17 @@ def main():
         except KeyboardInterrupt:
             logging.info('BOT stopped with keyboard')
             break
+
+        except SystemExit as error:
+            send_message(f'BOT is dropped with error: {error}', bot)
+            logging.error(f'BOT is dropped with error: {error}')
+            time.sleep(WATCH_PERIOD)
+            continue
+
         except Exception as error:
+            send_message(f'BOT is dropped with error: {error}', bot)
             logging.error(f'BOT is dropped down with error: {error}')
-            time.sleep(10)
+            time.sleep(WATCH_PERIOD)
             continue
 
 
