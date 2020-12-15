@@ -109,18 +109,19 @@ def send_message(message, bot):
 
 def main():
     logging.info('BOT was started')
-    current_timestamp = int(time.time())
+    # current_timestamp = int(time.time())
     bot = telegram.Bot(token=TELEGRAM_TOKEN)
 
     while True:
         try:
-            new_homework = get_homework_statuses(current_timestamp)
-            if new_homework.get('homeworks'):
-                send_message(
-                    parse_homework_status(new_homework.get('homeworks')[0]),
-                    bot
-                )
-            current_timestamp = new_homework.get('current_date')
+            # Check Yandex.Practicum homework status
+            # new_homework = get_homework_statuses(current_timestamp)
+            # if new_homework.get('homeworks'):
+            #     send_message(
+            #         parse_homework_status(new_homework.get('homeworks')[0]),
+            #         bot
+            #     )
+            # current_timestamp = new_homework.get('current_date')
 
             is_crl_updated = check_crl_status(CRL_URLS)
             if is_crl_updated['server_errors'] or is_crl_updated['crl_errors']:
