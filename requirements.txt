@@ -9,7 +9,7 @@ idna==2.10
 pycparser==2.20
 PySocks==1.7.1
 python-dotenv==0.14.0
-python-telegram-bot==13.0
+python-telegram-bot==13.2
 pytz==2020.1
 requests==2.24.0
 six==1.15.0

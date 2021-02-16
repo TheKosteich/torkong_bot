@@ -18,43 +18,12 @@ logging.basicConfig(
 )
 
 WATCH_PERIOD = int(os.getenv('WATCH_PERIOD'))
-PRACTICUM_TOKEN = os.getenv('PRACTICUM_TOKEN')
-BASE_URL = 'https://praktikum.yandex.ru/api/user_api/homework_statuses/'
 
 TELEGRAM_TOKEN = os.getenv('TELEGRAM_TOKEN')
 CHAT_ID = os.getenv('TELEGRAM_CHAT_ID')
 
 CRL_URLS = os.getenv('CRL_URLS_LIST').split(' ')
 CRL_OVERLAP_TIME = int(os.getenv('CRL_OVERLAP_TIME'))
-
-
-def parse_homework_status(homework):
-    homework_name = homework.get('homework_name')
-    homework_status = homework.get('status')
-    if homework_status and homework_name:
-        if homework_status == 'rejected':
-            verdict = 'Code reviewer found errors in homework.'
-        elif homework_status == 'approved':
-            verdict = 'It is accepted! You can start next lesson!'
-        else:
-            raise ValueError('Bad "status" key value')
-        return f'Homework "{homework_name}" is checked!\n\n{verdict}'
-    else:
-        raise KeyError('No "homework_name" and/or "status" key in argument.')
-
-
-def get_homework_statuses(current_timestamp):
-    headers = {'Authorization': f'OAuth {PRACTICUM_TOKEN}'}
-    from_date = current_timestamp
-    params = {'from_date': from_date}
-    try:
-        homework_statuses = requests.get(BASE_URL,
-                                         params=params,
-                                         headers=headers)
-        homework_statuses.raise_for_status()
-    except requests.exceptions.RequestException as error:
-        raise SystemExit(error)
-    return homework_statuses.json()
 
 
 def check_crl_status(crl_urls):
@@ -109,20 +78,12 @@ def send_message(message, bot):
 
 def main():
     logging.info('BOT was started')
-    # current_timestamp = int(time.time())
     bot = telegram.Bot(token=TELEGRAM_TOKEN)
+
+    send_message('Bot started', bot)
 
     while True:
         try:
-            # Check Yandex.Practicum homework status
-            # new_homework = get_homework_statuses(current_timestamp)
-            # if new_homework.get('homeworks'):
-            #     send_message(
-            #         parse_homework_status(new_homework.get('homeworks')[0]),
-            #         bot
-            #     )
-            # current_timestamp = new_homework.get('current_date')
-
             is_crl_updated = check_crl_status(CRL_URLS)
             if is_crl_updated['server_errors'] or is_crl_updated['crl_errors']:
                 send_message(parse_crl_status(is_crl_updated), bot)
